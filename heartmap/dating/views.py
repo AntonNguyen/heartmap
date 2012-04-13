@@ -12,5 +12,5 @@ def twilio(request):
 	import twilio.twiml
 
 	resp = twilio.twiml.Response()
-	resp.sms("Hello Rae!")
+	resp.say("Hello Rae!")
 	return HttpResponse(str(resp), mimetype="application/xml")
