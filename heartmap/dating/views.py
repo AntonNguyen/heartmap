@@ -37,12 +37,20 @@ def incoming(request):
 def outgoing(request):
 	from twilio.rest import TwilioRestClient
 
+	caller_id = "+16479311254"
+
 	account_sid = "AC8ff5d5559906452dac072725264d5863"
 	auth_token = "edd564df902310a3354ec1e77605fadd"
 
 	client = TwilioRestClient(account_sid, auth_token)
-	call = client.calls.create(to="+16473099891",
-							   from_="+16479311254",
+	first_call = client.calls.create(to="+16473099891",
+							   from_=caller_id,
+							   url="http://twimlets.com/holdmusic?Bucket=com.twilio.music.ambient",
+							   status_callback="http://afn85.webfactional.com/hackto/connect/")
+
+	second_call = client.calls.create(to="+6476698275",
+							   from_=caller_id,
+							   url="http://twimlets.com/holdmusic?Bucket=com.twilio.music.ambient",
 							   status_callback="http://afn85.webfactional.com/hackto/connect/")
 
 	return HttpResponse("Ok!")
@@ -51,5 +59,7 @@ def connect(request):
 	import twilio.twiml
 
 	resp = twilio.twiml.Response()
-	resp.dial(number="+16476698275")
+	resp.say("You are now entering the conference line.")
+	with resp.dial(conference="hello") as g:
+		g.conference("hello")
 	return HttpResponse(str(resp), mimetype="application/xml")
