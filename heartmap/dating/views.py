@@ -70,7 +70,7 @@ def matches(request):
 
 @login_required
 def match(request, match_id):
-	from django.utils.simplejson import simplejson
+	from django.utils import simplejson
 	import urllib2
 
 	# Get User
