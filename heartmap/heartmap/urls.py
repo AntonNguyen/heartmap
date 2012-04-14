@@ -7,7 +7,9 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'dating.views.index'),
-    url(r'^twilio/$', 'dating.views.twilio'),
+    url(r'^incoming/$', 'dating.views.incoming'),
+    url(r'^outgoing/$', 'dating.views.outgoing'),
+    url(r'^connect/$', 'dating.views.connect'),
     # url(r'^$', 'heartmap.views.home', name='home'),
     # url(r'^heartmap/', include('heartmap.foo.urls')),
 
