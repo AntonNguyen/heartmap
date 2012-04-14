@@ -85,7 +85,7 @@ def yellow_call(what):
 	from django.utils import simplejson
 	import urllib2
 
-	url = "http://api.sandbox.yellowapi.com/FindBusiness/?what=" + what + "&where=Toronto&UID=127.0.0.1&apikey=djesz8tau27gh528rr7p34fn&fmt=json"
+	url = "http://api.sandbox.yellowapi.com/FindBusiness/?what=" + what + "&where=Toronto&UID=127.0.0.1&apikey=djesz8tau27gh528rr7p34fn&fmt=json&pgLen=1"
 
 	json = urllib2.urlopen(url).read()
 	json = simplejson.loads(json)
