@@ -4,7 +4,7 @@
 	</head>
 	<body>
 		{% for user in users %}
-			<a href = "{{ base }}/match/{{ user.id }}">
+			<a href = "{{ base }}/match/{{ user.id }}/">
 				Username: {{ user.username }}
 			</a><br/>
 			Birthday: {{ user.get_profile.birthday }}<br/>
