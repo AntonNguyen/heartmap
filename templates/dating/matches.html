@@ -48,7 +48,10 @@
 						<h2>{{ user.username }}</h2>
 						Location: Toronto<br />
 						Age: {{ user.get_profile.get_age }} yrs old<br />
-						<a href="{{ base }}/outgoing/?first_caller={{ person.get_profile.phone }}&second_caller={{ user.get_profile.phone }}">Call Me</a>
+						<div class="call">
+							<a href="{{ base }}/outgoing/?first_caller={{ person.get_profile.phone }}&second_caller={{ user.get_profile.phone }}">Call Me</a>
+						</div>
+						
 					</div>
 				{% endfor %}
 
