@@ -1,32 +1,63 @@
-<html>
-	<head>
-		<title>Home</title>
-	</head>
-	<body>
-		<h1>Signup</h1>
-		<form method="POST" action="{{ base }}/signup/">
-			Username: <input type="text" name="username"/><br/>
-			Password: <input type="password" name="password"/><br/>
-			Email: <input type="text" name="email"/><br/>
-			Birthday: <input type="text" name="birthday"/><br/>
-			Phone: <input type="text" name="phone"/><br/>
-			Sex: <select name="sex">
-				<option value="M">Male</option>
-				<option value="F">Female</option>
-			</select><br/>
-			Seeking: <select name="seeking">
-				<option value="M">Male</option>
-				<option value="F">Female</option>
-			</select>
-			<input type="submit" value="Sign up!"/>
-		</form>
-		<br/><br/>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Heart Map</title>
 
-		<h1>Login</h1>
-		<form method="POST" action="{{ base }}/login/">
-			Username: <input type="text" name="username"/><br/>
-			Password: <input type="password" name="password"/><br/>
-			<input type="submit" value="Login!"/>
-		</form>
-	</body>
+<link href="http://afn85.webfactional.com/media/styles.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body class="home">
+	<div class="topbar">
+		<div class="topbar-container">
+			<form method="POST" action="{{ base }}/login/">
+				Username: <input type="text" name="username"/>
+				Password: <input type="password" name="password"/>
+				<input type="submit" value="Login!"/>
+			</form>
+		</div>
+	</div>
+	
+	<div class="container">
+		<div class="signup">
+			<form method="POST" action="{{ base }}/signup/">
+				<h1>Sign up Now!</h1>
+				
+				<label>Username:</label> 
+				<input type="text" name="username"/><br/>
+				
+				<label>Password:</label> 
+				<input type="password" name="password"/><br/>
+				
+				<label>Email:</label>
+				<input type="text" name="email"/><br/>
+				
+				<label>Birthday:</label> 
+				<input type="text" name="birthday"/><br/>
+				
+				<label>Phone:</label>		
+				<input type="text" name="phone"/><br/>
+				
+				<label>Sex:</label>	
+				<select name="sex">
+				<option value="M">Male</option>
+				<option value="F">Female</option>
+				</select><br/>
+				
+				<label>Seeking:</label>
+				<select name="seeking">
+				<option value="M">Male</option>
+				<option value="F">Female</option>
+				</select><br />							
+							
+				<label></label>
+				<input type="submit" value="Sign up!" class"getconnect"/>
+				
+			</form>
+		</div>
+	</div>
+
+
+</body>
+
 </html>

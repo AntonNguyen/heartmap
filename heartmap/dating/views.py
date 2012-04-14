@@ -63,6 +63,7 @@ def matches(request):
 	t = loader.get_template('dating/matches.html')
 	c = Context({
 		"base" : base,
+		"person" : request.user,
 		"users" : User.objects.all().exclude(id=request.user.id)
 	})
 	return HttpResponse(t.render(c))
@@ -98,24 +99,27 @@ def me(request):
 	return HttpResponse("me")
 
 @login_required
-def make_call(request, first_caller, second_caller):
+def outgoing(request):
 	from twilio.rest import TwilioRestClient
 
 	caller_id = "+16479311254"
+
+	first_number = "+1" + request.GET.get("first_caller")
+	second_number = "+1" + request.GET.get("second_caller")
 
 	account_sid = "AC8ff5d5559906452dac072725264d5863"
 	auth_token = "edd564df902310a3354ec1e77605fadd"
 
 	client = TwilioRestClient(account_sid, auth_token)
-	first_call = client.calls.create(to="+1" + first_caller,
+	first_call = client.calls.create(to=first_number,
 							   from_=caller_id,
 							   method="GET",
-							   url="http://afn85.webfactional.com/hackto/connect/?room=FreshBooks_" & first_caller + second_caller)
+							   url="http://afn85.webfactional.com/hackto/connect/?room=FreshBooks_" + str(first_number) + str(second_number))
 
-	second_call = client.calls.create(to="+1" + second_caller,
+	second_call = client.calls.create(to=second_number,
 							   from_=caller_id,
 							   method="GET",
-							   url="http://afn85.webfactional.com/hackto/connect/?room=FreshBooks_" & first_caller + second_caller)
+							   url="http://afn85.webfactional.com/hackto/connect/?room=FreshBooks_" + str(first_number) + str(second_number))
 
 	return HttpResponseRedirect(base + "/matches/")
 

@@ -9,6 +9,7 @@
 			</a><br/>
 			Birthday: {{ user.get_profile.birthday }}<br/>
 			Gender: {{ user.get_profile.gender }}<br/>
+			<a href="{{ base }}/outgoing/?first_caller={{ person.get_profile.phone }}&second_caller={{ user.get_profile.phone }}">Call Me</a>
 			<br/>
 		{% endfor %}
 
