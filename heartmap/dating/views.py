@@ -8,7 +8,9 @@ base = ''
 
 def index(request):
 	t = loader.get_template('dating/index.html')
-	c = Context()
+	c = Context({
+		"base" : base
+	})
 	return HttpResponse(t.render(c))
 
 def signup(request):
