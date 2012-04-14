@@ -45,9 +45,11 @@
 						<div class="profile-img">
 							<img src ="http://afn85.webfactional.com/media/images/{{ forloop.counter }}.jpg"/>
 						</div>
-						<h2>{{ user.username }}</h2>
-						Location: Toronto<br />
-						Age: {{ user.get_profile.get_age }} yrs old<br />
+						<div class="profile-con">
+							<h2>{{ user.username }}</h2>
+							Location: Toronto<br />
+							Age: {{ user.get_profile.get_age }} yrs old<br />
+						</div>
 						<div class="call">
 							<a href="{{ base }}/outgoing/?first_caller={{ person.get_profile.phone }}&second_caller={{ user.get_profile.phone }}">Call Me</a>
 						</div>
