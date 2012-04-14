@@ -60,6 +60,6 @@ def connect(request):
 
 	resp = twilio.twiml.Response()
 	resp.say("You are now entering the conference line.")
-	with resp.dial(conference="hello") as g:
+	with resp.dial() as g:
 		g.conference("hello")
 	return HttpResponse(str(resp), mimetype="application/xml")
