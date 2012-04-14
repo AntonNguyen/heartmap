@@ -9,6 +9,7 @@ class UserProfile(models.Model):
 	GENDER_CHOICES = (
 		(u'M', u'Male'),
 		(u'F', u'Female'),
+		(u'B', u'Both'),
 	)
 
 	birthday = models.DateField(blank = True, null = True)

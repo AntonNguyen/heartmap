@@ -3,15 +3,57 @@
 		<title>Home</title>
 	</head>
 	<body>
-		{% for user in users %}
-			<a href = "{{ base }}/match/{{ user.id }}/">
-				Username: {{ user.username }}
-			</a><br/>
-			Birthday: {{ user.get_profile.birthday }}<br/>
-			Gender: {{ user.get_profile.gender }}<br/>
-			<a href="{{ base }}/outgoing/?first_caller={{ person.get_profile.phone }}&second_caller={{ user.get_profile.phone }}">Call Me</a>
-			<br/>
-		{% endfor %}
+
+
+
 
 	</body>
+</html>
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Heart Map</title>
+
+<link href="http://afn85.webfactional.com/media/styles.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body class="other">
+	<div class="container">
+		<div class="content">
+			<div class="logo">
+				<img src="http://afn85.webfactional.com/media/images/logo.gif">
+				<div class="menu">
+					<ul>
+						<li>Home</li>
+						<li><a href="{{ base }}/outgoing/?first_caller={{ person.get_profile.phone }}&second_caller={{ taxi.phone.dispNum }}">Call Taxi</a></li>
+						<li><a href="{{ base }}/outgoing/?first_caller={{ person.get_profile.phone }}&second_caller={{ florist.phone.dispNum }}">Order Flowers</a></li>
+						<li><a href="{{ base }}/outgoing/?first_caller={{ person.get_profile.phone }}&second_caller={{ chocolates.phone.dispNum }}">Buy Chocolates</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="maincontent">
+				<h1>Your Matches</h1>
+
+				{% for user in users %}
+					<div class="profile">
+						<div class="profile-img">
+							<img src ="http://afn85.webfactional.com/media/images/{{ forloop.counter }}.jpg"/>
+						</div>
+						<h2>{{ user.username }}</h2>
+						Location: Toronto<br />
+						Age: {{ user.get_profile.get_age }} yrs old<br />
+						<a href="{{ base }}/outgoing/?first_caller={{ person.get_profile.phone }}&second_caller={{ user.get_profile.phone }}">Call Me</a>
+					</div>
+				{% endfor %}
+
+			</div>
+			
+		</div>
+	</div>
+</body>
 </html>

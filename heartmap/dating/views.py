@@ -60,39 +60,37 @@ def do_logout(request):
 
 @login_required
 def matches(request):
+	# Get Flowers
+	florist = yellow_call("florists")
+
+	# Get chocolates
+	chocolates = yellow_call("chocolates")
+
+	# Get taxi
+	taxi = yellow_call("taxi")
+
 	t = loader.get_template('dating/matches.html')
 	c = Context({
 		"base" : base,
 		"person" : request.user,
-		"users" : User.objects.all().exclude(id=request.user.id)
+		"users" : User.objects.all().exclude(id=request.user.id),
+		'florist' : florist,
+		'chocolates' : chocolates,
+		'taxi' : taxi
 	})
 	return HttpResponse(t.render(c))
 
 
-@login_required
-def match(request, match_id):
+def yellow_call(what):
 	from django.utils import simplejson
 	import urllib2
 
-	# Get User
-	user = User.objects.get(id=match_id)
-
-	# Get Flowers
-	url = "http://api.sandbox.yellowapi.com/FindBusiness/?what=florists&where=Toronto&UID=127.0.0.1&apikey=djesz8tau27gh528rr7p34fn&fmt=json"
+	url = "http://api.sandbox.yellowapi.com/FindBusiness/?what=" + what + "&where=Toronto&UID=127.0.0.1&apikey=djesz8tau27gh528rr7p34fn&fmt=json"
 
 	json = urllib2.urlopen(url).read()
 	json = simplejson.loads(json)
-	florist = json['listings'][0]
-
-	# Build Template
-	t = loader.get_template('dating/profile.html')
-	c = Context({
-		"base" : base,
-		"user" : user,
-		"florist" : florist
-	})
-
-	return HttpResponse(t.render(c))
+	response = json['listings'][0]
+	return response
 
 @login_required
 def me(request):
@@ -116,10 +114,13 @@ def outgoing(request):
 							   method="GET",
 							   url="http://afn85.webfactional.com/hackto/connect/?room=FreshBooks_" + str(first_number) + str(second_number))
 
-	second_call = client.calls.create(to=second_number,
-							   from_=caller_id,
-							   method="GET",
-							   url="http://afn85.webfactional.com/hackto/connect/?room=FreshBooks_" + str(first_number) + str(second_number))
+	try:
+		second_call = client.calls.create(to=second_number,
+								   from_=caller_id,
+								   method="GET",
+								   url="http://afn85.webfactional.com/hackto/connect/?room=FreshBooks_" + str(first_number) + str(second_number))
+	except:
+		pass
 
 	return HttpResponseRedirect(base + "/matches/")
 
