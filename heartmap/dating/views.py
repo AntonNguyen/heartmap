@@ -1,40 +1,99 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import Context, loader
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+
+import models
 
 def index(request):
 	t = loader.get_template('dating/index.html')
+	c = Context()
+	return HttpResponse(t.render(c))
+
+def signup(request):
+	if request.POST:
+		username = request.POST.get("username")
+		password = request.POST.get("password")
+		email = request.POST.get("email")
+		user = User.objects.create_user(username, email, password)
+		user.save()
+
+		birthday = request.POST.get("birthday")
+		gender = request.POST.get("sex")
+		seeking = request.POST.get("seeking")
+		phone = request.POST.get("phone")
+
+		profile = user.get_profile()
+		profile.gender = gender
+		profile.seeking = seeking
+		profile.birthday = birthday
+		profile.phone = phone
+		profile.save()
+
+		user.backend = 'django.contrib.auth.backends.ModelBackend'
+		login(request, user)
+		return HttpResponseRedirect("/matches/")
+	else:
+		return HttpResponseRedirect("/")
+
+def do_login(request):
+	if request.POST:
+		username = request.POST.get('username')
+		password = request.POST.get('password')
+
+		user = authenticate(username = username, password = password)
+		if user is not None:
+			if user.is_active:
+				login(request, user)
+				return HttpResponseRedirect("/matches/")
+
+	return HttpResponseRedirect("/")
+
+@login_required
+def do_logout(request):
+	logout(request)
+	return HttpResponseRedirect("/")
+
+@login_required
+def matches(request):
+	t = loader.get_template('dating/matches.html')
 	c = Context({
-		'name' : 'Anton'
+		"users" : User.objects.all().exclude(id=request.user.id)
 	})
-	return HttpResponse("hello")
+	return HttpResponse(t.render(c))
 
-def incoming(request):
-	import twilio.twiml
-	import string
 
-	callers = {
-		"+16476698275" : "Anton Nguyen",
-		"+16473099891" : "Rae Chao Jin Qu"
-	}
+@login_required
+def match(request, match_id):
+	from django.utils.simplejson import simplejson
+	import urllib2
 
-	queries = dict(zip(map(string.lower, request.GET.keys()), request.GET.values()))
+	# Get User
+	user = User.objects.get(id=match_id)
 
-	response = "Hello Monkey!"
-	resp = twilio.twiml.Response()
+	# Get Flowers
+	url = "http://api.sandbox.yellowapi.com/FindBusiness/?what=florists&where=Toronto&UID=127.0.0.1&apikey=djesz8tau27gh528rr7p34fn&fmt=json"
 
-	from_number = queries.get('from', '')
-	if from_number != '':
-		for number in callers:
-			print number.find(str(from_number))
-			if number.find(from_number) > -1:
-				response = "Hello " + callers[number]
-				break
+	json = urllib2.urlopen(url).read()
+	json = simplejson.loads(json)
+	florist = json['listings'][0]
 
-	resp.say(response)
+	# Build Template
+	t = loader.get_template('dating/profile.html')
+	c = Context({
+		"user" : user,
+		"florist" : florist
+	})
 
-	return HttpResponse(str(resp), mimetype="application/xml")
+	return HttpResponse(t.render(c))
 
-def outgoing(request):
+@login_required
+def me(request):
+	return HttpResponse("me")
+
+@login_required
+def make_call(request, first_caller, second_caller):
 	from twilio.rest import TwilioRestClient
 
 	caller_id = "+16479311254"
@@ -43,23 +102,25 @@ def outgoing(request):
 	auth_token = "edd564df902310a3354ec1e77605fadd"
 
 	client = TwilioRestClient(account_sid, auth_token)
-	first_call = client.calls.create(to="+16473099891",
+	first_call = client.calls.create(to="+1" + first_caller,
 							   from_=caller_id,
-							   url="http://twimlets.com/holdmusic?Bucket=com.twilio.music.ambient",
-							   status_callback="http://afn85.webfactional.com/hackto/connect/")
+							   method="GET",
+							   url="http://afn85.webfactional.com/hackto/connect/?room=FreshBooks_" & first_caller + second_caller)
 
-	second_call = client.calls.create(to="+16476698275",
+	second_call = client.calls.create(to="+1" + second_caller,
 							   from_=caller_id,
-							   url="http://twimlets.com/holdmusic?Bucket=com.twilio.music.ambient",
-							   status_callback="http://afn85.webfactional.com/hackto/connect/")
+							   method="GET",
+							   url="http://afn85.webfactional.com/hackto/connect/?room=FreshBooks_" & first_caller + second_caller)
 
-	return HttpResponse("Ok!")
+	return HttpResponseRedirect("/matches/")
 
 def connect(request):
 	import twilio.twiml
 
+	room = request.GET.get("room")
+
 	resp = twilio.twiml.Response()
 	resp.say("You are now entering the conference line.")
 	with resp.dial() as g:
-		g.conference("FreshBooks")
+		g.conference(room)
 	return HttpResponse(str(resp), mimetype="application/xml")

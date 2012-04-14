@@ -1,0 +1,21 @@
+<html>
+	<head>
+		<title>Home</title>
+	</head>
+	<body>
+		<h1>User</h1>
+		{{ user.username }}<br/>
+		{{ user.get_profile.birthday|date:"M d" }}<br/>
+		{{ user.get_profile.get_age }}<br/>
+		{{ user.get_profile.gender }}<br/>
+		{{ user.get_profile.seeking }}<br/>
+		{% if user.get_profile.summary %}
+			{{ user.get_profile.summary }}<br/>
+		{% endif %}
+
+		<h1>Buy Flowers</h1>
+		<h2>{{ florist.name }}</h2>
+		<img src="{{ florist.thumbUrl }}"/>
+		{{ florist.phone.dispNum }}
+	</body>
+</html>

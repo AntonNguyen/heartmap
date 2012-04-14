@@ -7,6 +7,12 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'dating.views.index'),
+    url(r'^signup/$', 'dating.views.signup'),
+    url(r'^login/$', 'dating.views.do_login'),
+    url(r'^logout/$', 'dating.views.do_logout'),
+    url(r'^me/$', 'dating.views.me'),
+    url(r'^match/(?P<match_id>\d+)/$', 'dating.views.match'),
+    url(r'^matches/$', 'dating.views.matches'),
     url(r'^incoming/$', 'dating.views.incoming'),
     url(r'^outgoing/$', 'dating.views.outgoing'),
     url(r'^connect/$', 'dating.views.connect'),

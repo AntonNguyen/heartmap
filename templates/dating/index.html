@@ -3,6 +3,30 @@
 		<title>Home</title>
 	</head>
 	<body>
-		Hello {{ name }}!
+		<h1>Signup</h1>
+		<form method="POST" action="/signup/">
+			Username: <input type="text" name="username"/><br/>
+			Password: <input type="password" name="password"/><br/>
+			Email: <input type="text" name="email"/><br/>
+			Birthday: <input type="text" name="birthday"/><br/>
+			Phone: <input type="text" name="phone"/><br/>
+			Sex: <select name="sex">
+				<option value="M">Male</option>
+				<option value="F">Female</option>
+			</select><br/>
+			Seeking: <select name="seeking">
+				<option value="M">Male</option>
+				<option value="F">Female</option>
+			</select>
+			<input type="submit" value="Sign up!"/>
+		</form>
+		<br/><br/>
+
+		<h1>Login</h1>
+		<form method="POST" action="/login/">
+			Username: <input type="text" name="username"/><br/>
+			Password: <input type="password" name="password"/><br/>
+			<input type="submit" value="Login!"/>
+		</form>
 	</body>
 </html>
