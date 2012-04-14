@@ -48,7 +48,7 @@ def outgoing(request):
 							   url="http://twimlets.com/holdmusic?Bucket=com.twilio.music.ambient",
 							   status_callback="http://afn85.webfactional.com/hackto/connect/")
 
-	second_call = client.calls.create(to="+6476698275",
+	second_call = client.calls.create(to="+16476698275",
 							   from_=caller_id,
 							   url="http://twimlets.com/holdmusic?Bucket=com.twilio.music.ambient",
 							   status_callback="http://afn85.webfactional.com/hackto/connect/")
@@ -61,5 +61,5 @@ def connect(request):
 	resp = twilio.twiml.Response()
 	resp.say("You are now entering the conference line.")
 	with resp.dial() as g:
-		g.conference("hello")
+		g.conference("FreshBooks")
 	return HttpResponse(str(resp), mimetype="application/xml")
