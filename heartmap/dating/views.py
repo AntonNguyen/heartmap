@@ -3,8 +3,8 @@ from django.template import Context, loader
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-
 import models
+base = ''
 
 def index(request):
 	t = loader.get_template('dating/index.html')
@@ -12,6 +12,7 @@ def index(request):
 	return HttpResponse(t.render(c))
 
 def signup(request):
+
 	if request.POST:
 		username = request.POST.get("username")
 		password = request.POST.get("password")
@@ -33,9 +34,9 @@ def signup(request):
 
 		user.backend = 'django.contrib.auth.backends.ModelBackend'
 		login(request, user)
-		return HttpResponseRedirect("/matches/")
+		return HttpResponseRedirect(base + "/matches/")
 	else:
-		return HttpResponseRedirect("/")
+		return HttpResponseRedirect(base + "/")
 
 def do_login(request):
 	if request.POST:
@@ -46,19 +47,20 @@ def do_login(request):
 		if user is not None:
 			if user.is_active:
 				login(request, user)
-				return HttpResponseRedirect("/matches/")
+				return HttpResponseRedirect(base + "/matches/")
 
-	return HttpResponseRedirect("/")
+	return HttpResponseRedirect(base + "/")
 
 @login_required
 def do_logout(request):
 	logout(request)
-	return HttpResponseRedirect("/")
+	return HttpResponseRedirect(base + "/")
 
 @login_required
 def matches(request):
 	t = loader.get_template('dating/matches.html')
 	c = Context({
+		"base" : base,
 		"users" : User.objects.all().exclude(id=request.user.id)
 	})
 	return HttpResponse(t.render(c))
@@ -82,6 +84,7 @@ def match(request, match_id):
 	# Build Template
 	t = loader.get_template('dating/profile.html')
 	c = Context({
+		"base" : base,
 		"user" : user,
 		"florist" : florist
 	})
@@ -112,7 +115,7 @@ def make_call(request, first_caller, second_caller):
 							   method="GET",
 							   url="http://afn85.webfactional.com/hackto/connect/?room=FreshBooks_" & first_caller + second_caller)
 
-	return HttpResponseRedirect("/matches/")
+	return HttpResponseRedirect(base + "/matches/")
 
 def connect(request):
 	import twilio.twiml
